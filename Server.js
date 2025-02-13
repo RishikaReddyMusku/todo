@@ -5,10 +5,15 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.get("/", (req, res) => {
+    res.send("Welcome to the Todo API!");
+});
 
-mongoose.connect("mongodb+srv://rishikareddy063:pandu1234@cluster0.0fcok.mongodb.net/todo", { useNewUrlParser: true, useUnifiedTopology: true })
+
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log(err));
+
 
 const TaskSchema = new mongoose.Schema({
     text: String,
@@ -38,4 +43,6 @@ app.delete("/tasks/:id", async (req, res) => {
     res.json({ message: "Task deleted" });
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(process.env.PORT || 5000, () => {
+    console.log(`Server running on port ${process.env.PORT || 5000}`);
+});
